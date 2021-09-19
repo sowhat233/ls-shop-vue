@@ -2,7 +2,7 @@
     <div class="header-div">
         <div class="flex aic">
             <i class="el-icon-s-fold"></i>
-            <span>sw-shop后台管理系统</span>
+            <span>ls-shop后台管理系统</span>
         </div>
         <div>
             <el-dropdown>

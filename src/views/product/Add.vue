@@ -16,7 +16,7 @@
 
         </el-tab-pane>
 
-        <template v-if="multiple_spec">
+        <template v-if="is_multiple_spec">
 
             <el-tab-pane label="商品规格" :name="refs.sku.name">
 
@@ -92,7 +92,7 @@
                     'detail': {'name': 'product_detail', 'submit': true},
                     'sku': {'name': 'product_sku', 'submit': true},
                 },
-                multiple_spec: 1,//默认启动多规格
+                is_multiple_spec: 1,//默认为多规格
                 component_data: {},
                 submit_data: {
                     'product_info': {},
@@ -107,7 +107,7 @@
                         "name": "13",
                         "description": "23",
                         "image": "//api.ls-shop.com/uploads/images/20210917/1631829461_RVL6A.png",
-                        "sale_status": 1,
+                        "is_launched": 1,
                         "carousels": [
                             {
                                 "url": "//api.ls-shop.com/uploads/images/20210917/1631829570_1XZft.png",
@@ -116,7 +116,7 @@
                                 "status": "success"
                             }
                         ],
-                        "multiple_spec": 0,
+                        "is_multiple_spec": 0,
                         "stock": "1",
                         "price": "1.11",
                         "cost_price": "0.01",
@@ -130,7 +130,7 @@
                         "name": "13",
                         "description": "23",
                         "image": "//api.ls-shop.com/uploads/images/20210917/1631829461_RVL6A.png",
-                        "sale_status": 1,
+                        "is_launched": 1,
                         "carousels": [
                             {
                                 "url": "//api.ls-shop.com/uploads/images/20210917/1631829570_1XZft.png",
@@ -139,7 +139,7 @@
                                 "status": "success"
                             }
                         ],
-                        "multiple_spec": 1,
+                        "is_multiple_spec": 1,
                         "stock": "1",
                         "price": "1.11",
                         "cost_price": "0.01",
@@ -244,10 +244,10 @@
             },
             specType(type) {
 
-                this.multiple_spec = type;
+                this.is_multiple_spec = type;
 
                 //如果启用多规格 就需要验证product-sku组件的数据以及提取数据
-                if (this.multiple_spec === 1) {
+                if (this.is_multiple_spec === 1) {
 
                     this.refs.sku.submit = true;
 
@@ -349,7 +349,7 @@
                 //商品详情
                 submit_data.product_info.detail = data.product_detail;
 
-                if (this.multiple_spec === 1) {
+                if (this.is_multiple_spec === 1) {
 
                     submit_data.product_sku = data.product_sku;
 

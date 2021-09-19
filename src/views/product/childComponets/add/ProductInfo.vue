@@ -51,8 +51,8 @@
         </el-form-item>
 
         <el-form-item label="商品状态">
-            <el-switch inactive-color="#DD001B" v-model="form.sale_status"
-                       name="sale_status"
+            <el-switch inactive-color="#DD001B" v-model="form.is_launched"
+                       name="is_launched"
                        :active-value="status_arr.active_value"
                        :inactive-value="status_arr.inactive_value"
                        :active-text="status_arr.active_text"
@@ -60,15 +60,15 @@
         </el-form-item>
 
         <el-form-item label="规格类型">
-            <el-switch v-model="form.multiple_spec" @change="changeSpecType()"
-                       name="multiple_spec"
-                       :active-value="multiple_spec.active_value"
-                       :inactive-value="multiple_spec.inactive_value"
-                       :active-text="multiple_spec.active_text"
-                       :inactive-text="multiple_spec.inactive_text"></el-switch>
+            <el-switch v-model="form.is_multiple_spec" @change="changeSpecType()"
+                       name="is_multiple_spec"
+                       :active-value="spec_type.active_value"
+                       :inactive-value="spec_type.inactive_value"
+                       :active-text="spec_type.active_text"
+                       :inactive-text="spec_type.inactive_text"></el-switch>
         </el-form-item>
 
-        <div v-show="!form.multiple_spec">
+        <div v-show="!form.is_multiple_spec">
 
             <el-form-item label="商品库存" prop="stock">
                 <el-input-number v-model.number="form.stock" placeholder="商品库存"
@@ -110,9 +110,9 @@
                     name: '',//商品名字
                     description: '',//商品简介
                     image: '',//商品主图
-                    sale_status: 1,//商品状态
+                    is_launched: 1,//商品状态
                     carousels: [],//轮播图
-                    multiple_spec: 1,//是否启用多规格
+                    is_multiple_spec: 1,//是否为多规格
                     stock: '',//单规格商品的库存
                     price: '',//单规格商品的售价
                     cost_price: '',//单规格商品的进价
@@ -126,7 +126,7 @@
                     'active_text': '上架',
                     'inactive_text': '下架',
                 },
-                multiple_spec: {
+                spec_type: {
                     'active_value': 1,
                     'inactive_value': 0,
                     'active_text': '多规格',
@@ -177,7 +177,7 @@
                 "name": "13",
                 "description": "23",
                 "image": "//api.ls-shop.com/uploads/images/20210917/1631829461_RVL6A.png",
-                "sale_status": 1,
+                "is_launched": 1,
                 "carousels": [
                     {
                         "url": "//api.ls-shop.com/uploads/images/20210917/1631829570_1XZft.png",
@@ -186,7 +186,7 @@
                         "status": "success"
                     }
                 ],
-                "multiple_spec": 0,
+                "is_multiple_spec": 0,
                 "stock": "",
                 "price": "",
                 "cost_price": "",
@@ -317,7 +317,7 @@
             changeSpecType() {
 
                 //如果启用多规格 删除rules里的单规格验证规则
-                if (this.form.multiple_spec === 1) {
+                if (this.form.is_multiple_spec === 1) {
 
                     //删除rules里的单规格验证规则
                     let single_spec_rules = Object.keys(this.single_spec_rules);
@@ -343,7 +343,7 @@
                 }
 
                 //告诉父组件当前规格的类型
-                this.$emit('specType', this.form.multiple_spec);
+                this.$emit('specType', this.form.is_multiple_spec);
 
             },
             //验证
