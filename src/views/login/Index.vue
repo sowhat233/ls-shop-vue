@@ -26,7 +26,7 @@
 
 <script>
     import {login} from "@/http/login/login";
-    import {getToken} from "../../utils/token";
+    import {getToken} from "@/utils/token";
 
     export default {
         name: 'loginIndex',

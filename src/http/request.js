@@ -1,6 +1,6 @@
 import axios from "axios";
 import {Message} from 'element-ui';
-import {getToken,setToken} from "../utils/token";
+import {getToken,setToken} from "@/utils/token";
 
 export function request(config) {
 

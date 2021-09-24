@@ -1,6 +1,6 @@
 exports.install = function (Vue, options) {
 
-    Vue.prototype.copyDeep = (data) => {
+    Vue.prototype.deepCopy = (data) => {
 
         return JSON.parse(JSON.stringify(data));
 

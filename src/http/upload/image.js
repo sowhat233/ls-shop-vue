@@ -1,8 +1,8 @@
 import {request} from "../request";
 
-export function uploadImages(data) {
+export function uploadImage(data) {
     return  request({
-        url: '/images',
+        url: '/image',
         method: 'post',
         data: data,
     });

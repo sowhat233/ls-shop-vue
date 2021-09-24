@@ -59,7 +59,7 @@
 
                         console.log(result);
 
-                        if (result.code === 201) {
+                        if (result.code === 200) {
 
                             this.$message({
                                 'message': '编辑成功!',

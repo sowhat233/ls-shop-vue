@@ -24,7 +24,7 @@
                     list-type="picture"
                     :show-file-list="false"
                     :accept="images_ext"
-                    :http-request="uploadImages"
+                    :http-request="handleUploadImage"
                     :before-upload="checkImg">
                 <img :src="form.image ? form.image :upload_image" class="main-image">
             </el-upload>
@@ -81,7 +81,7 @@
             </el-form-item>
 
             <el-form-item label="商品进价" prop="cost_price">
-                <el-input-number v-model="form.cost_price" placeholder="商品进价"
+                <el-input-number v-model.number="form.cost_price" placeholder="商品进价"
                                  :min="0.00" :precision="2"></el-input-number>
             </el-form-item>
 
@@ -92,15 +92,19 @@
 </template>
 
 <script>
-    import {handleUploadImages} from "@/utils/handleUploadImages";
+    import {handleUploadImage} from "@/utils/handleUploadImage";
     import {checkExt, checkSize} from "@/utils/check";
+    import {getCategoryList} from "@/http/category/all";
 
     export default {
         name: "ProductInfo",
+        inheritAttrs: false,
         props: {
-            category_list: {
-                type: Array,
-                default: [],
+            product_info: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
             },
         },
         data() {
@@ -117,6 +121,7 @@
                     price: '',//单规格商品的售价
                     cost_price: '',//单规格商品的进价
                 },
+                category_list: [],
                 dialog_image_url: '',//预览图片url
                 dialog_visible: false,//预览图片显示（轮播图用）
                 upload_image: require('@/assets/images/admin/upload-bg.png'),
@@ -159,7 +164,6 @@
                     ],
                     price: [
                         {required: true, message: '请输入商品售价!', trigger: 'blur'},
-                        {validator: this.checkSellPrice, trigger: 'blur'}
                     ],
                     cost_price: [
                         {required: true, message: '请输入商品进价!', trigger: 'blur'},
@@ -172,35 +176,44 @@
             };
         },
         created() {
-            this.form = {
-                "category_id": 1,
-                "name": "13",
-                "description": "23",
-                "image": "//api.ls-shop.com/uploads/images/20210917/1631829461_RVL6A.png",
-                "is_launched": 1,
-                "carousels": [
-                    {
-                        "url": "//api.ls-shop.com/uploads/images/20210917/1631829570_1XZft.png",
-                        "name": "1631829570_1XZft.png",
-                        "uid": 1631829571253,
-                        "status": "success"
-                    }
-                ],
-                "is_multiple_spec": 0,
-                "stock": "",
-                "price": "",
-                "cost_price": "",
-            };
+
+            this.getCategoryList();
         },
         methods: {
-            checkSellPrice(rule, value, callback) {
+            getCategoryList() {
 
-                if (value < 0.01) {
+                getCategoryList().then(result => {
 
-                    callback(new Error(`商品售价不能小于0.01`));
+                    this.category_list = result.data.category_list;
 
-                    return false;
-                }
+                });
+
+            },
+            transformCarouse(carousels) {
+
+                let data = [], carousel = {}, i = 0;
+
+                carousels.split(',').map((item) => {
+                    carousel = {};
+                    carousel.url = item;
+                    carousel.name = this.getCarouselName(item);
+                    carousel.uid = new Date().getTime() + i;
+                    carousel.status = 'success';
+
+
+                    data.push(carousel);
+
+                    i++;
+                });
+
+                return data;
+            },
+            getCarouselName(item) {
+
+                let arr = item.split('/');
+
+                return arr[arr.length - 1];
+
             },
             checkCostPrice(rule, value, callback) {
 
@@ -228,9 +241,9 @@
 
             },
             //商品主图上传
-            uploadImages(params) {
+            handleUploadImage(params) {
 
-                handleUploadImages(params.file).then(result => {
+                handleUploadImage(params.file).then(result => {
 
                     if (result.code === 201) {
 
@@ -258,7 +271,7 @@
             //商品轮播图上传
             uploadCarousel(params) {
 
-                handleUploadImages(params.file).then(result => {
+                handleUploadImage(params.file).then(result => {
 
                     if (result.code === 201) {
 
@@ -269,14 +282,14 @@
 
                         this.$message({
                             'type': 'success',
-                            'message': result.msg,
+                            'message': result.message,
                         });
 
                     } else {
 
                         this.$message({
                             type: 'warning',
-                            message: result.msg,
+                            message: result.message,
                             duration: 5000
                         });
 
@@ -300,7 +313,7 @@
                     if (file.name === value.name) {
 
                         this.form.carousels.splice(key, 1);
-
+                        break;
                     }
 
                     key++;
@@ -313,34 +326,9 @@
                 this.dialog_image_url = file.url;
                 this.dialog_visible = true;
             },
+
             //单规格多规格切换
             changeSpecType() {
-
-                //如果启用多规格 删除rules里的单规格验证规则
-                if (this.form.is_multiple_spec === 1) {
-
-                    //删除rules里的单规格验证规则
-                    let single_spec_rules = Object.keys(this.single_spec_rules);
-
-                    for (let key in this.rules) {
-
-                        //如果有 那就删除
-                        if (this.inArray(single_spec_rules, key)) {
-
-                            delete this.rules[key];
-
-                        }
-
-                    }
-                    //如果启用单规格 给rules里添加单规格相关input框的验证规则
-                } else {
-
-                    for (let key in this.single_spec_rules) {
-
-                        this.rules[key] = this.single_spec_rules[key];
-                    }
-
-                }
 
                 //告诉父组件当前规格的类型
                 this.$emit('specType', this.form.is_multiple_spec);
@@ -367,7 +355,7 @@
             },//过滤
             filterReturnData() {
 
-                let carousels = [], product_info = this.copyDeep(this.form);
+                let carousels = [], product_info = this.deepCopy(this.form);
 
                 product_info.carousels.filter((value) => {
                     carousels.push(value.url);
@@ -390,7 +378,57 @@
 
             },
 
+
         },
+        watch: {
+            product_info(value, old_value) {
+
+                //如果不为空 说明是编辑 需要赋值
+                if (Object.keys(value).length !== 0) {
+
+                    this.form.name = value.name;
+                    this.form.category_id = value.category_id;
+                    this.form.description = value.description;
+                    this.form.image = value.image;
+                    this.form.is_multiple_spec = value.is_multiple_spec;
+                    this.form.carousels = this.transformCarouse(value.carousels);
+                    this.form.stock = value.stock;
+                    this.form.price = value.price;
+                    this.form.cost_price = value.cost_price;
+
+                }
+            },
+            'form.is_multiple_spec'(value) {
+
+                //如果启用多规格 删除rules里的单规格验证规则
+                if (value === 1) {
+
+                    //删除rules里的单规格验证规则
+                    let single_spec_rules = Object.keys(this.single_spec_rules);
+
+                    for (let key in this.rules) {
+
+                        //如果有 那就删除
+                        if (this.inArray(single_spec_rules, key)) {
+
+                            delete this.rules[key];
+
+                        }
+
+                    }
+                    //如果启用单规格 给rules里添加单规格相关input框的验证规则
+                } else {
+
+                    for (let key in this.single_spec_rules) {
+
+                        this.rules[key] = this.single_spec_rules[key];
+                    }
+
+                }
+
+            },
+
+        }
 
     };
 </script>

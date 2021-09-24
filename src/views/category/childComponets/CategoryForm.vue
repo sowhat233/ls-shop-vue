@@ -1,6 +1,6 @@
 <template>
 
-    <el-form ref="form" :model="form" :rules="rules" label-width="80px" >
+    <el-form ref="form" :model="form" :rules="rules" label-width="80px">
 
         <el-form-item label="分类名称" prop="name">
             <el-input v-model="form.name"></el-input>
@@ -20,9 +20,12 @@
         props: {
             form: {
                 type: Object,
-                default: {
-                    name: '',
-                    description: '',
+                default: () => {
+                    return {
+                        name: '',
+                        description: '',
+                    }
+
                 },
             },
 

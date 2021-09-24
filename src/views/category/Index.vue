@@ -101,8 +101,20 @@
 
                     console.log('getCategoryList', result);
 
-                    this.table_data = result.data;
-                    this.page_total = result.meta.total;
+                    if (result.code === 200) {
+
+                        this.table_data = result.data.data;
+                        this.page_total = result.data.total;
+
+                    } else {
+
+                        this.$message({
+                            type: 'warning',
+                            message: '请求失败！',
+                            duration: 5000
+                        });
+                    }
+
 
                 });
 

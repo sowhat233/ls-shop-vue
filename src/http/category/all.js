@@ -3,7 +3,7 @@ import {request} from "../request";
 export function getCategoryList() {
 
     return request({
-        url: '/product/category',
+        url: '/category/all',
         method: 'GET',
     });
 
