@@ -10,13 +10,24 @@
 
     export default {
         name: "ProductDetail",
+        props: {
+            //商品详情
+            product_detail: {
+                type: String,
+                default: ''
+            },
+        },
         components: {
             EditorBar,
         },
         data() {
             return {
-                value: '',
+                value: ''
             };
+        },
+        created() {
+
+
         },
         methods: {
             //验证数据
@@ -47,6 +58,12 @@
 
             },
         },
+        watch: {
+            product_detail(value, old_value) {
+
+                this.value = value;
+            }
+        }
     };
 </script>
 

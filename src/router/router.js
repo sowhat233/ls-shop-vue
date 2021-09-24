@@ -48,7 +48,7 @@ const routes = [
                 component: ProductAdd,
             }, {
                 path: '/product/edit',
-                name: 'productEdit',
+                name: 'ProductEdit',
                 component: ProductEdit,
             },
             //category

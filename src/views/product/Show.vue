@@ -47,13 +47,13 @@
 
             <div class="mb40">
                 <strong>商品主图：</strong>
-                <img :src="data.image" alt="" class="cursor" @click="checkImg(data.image)">
+                <img :src="data.image" alt="" class="cursor-pointer" @click="checkImg(data.image)">
             </div>
 
             <div class="mb40">
                 <strong>商品轮播图：</strong>
                 <template v-for="(item,key) in data.carousels">
-                    <img :src="item" alt="" class="cursor" @click="checkImg(item)">
+                    <img :src="item" alt="" class="cursor-pointer" @click="checkImg(item)">
                 </template>
             </div>
 
@@ -76,7 +76,7 @@
                     <div class="attr" v-for="(attr,key2) in item.attrs">{{attr}}</div>
 
                     <div class="w110">
-                        <div tabindex="0" class="el-upload cursor" @click="checkImg(item.image)">
+                        <div tabindex="0" class="el-upload cursor-pointer" @click="checkImg(item.image)">
                             <img :src="item.image" alt="" class="main-images">
                         </div>
                     </div>

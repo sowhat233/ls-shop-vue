@@ -87,7 +87,7 @@
                                    :show-file-list="false"
                                    :accept="images_ext"
                                    :before-upload="checkImg"
-                                   :http-request="function (fn) { return uploadImages(fn, key)}">
+                                   :http-request="function (fn) { return uploadImage(fn, key)}">
 
                             <img :src="item.image" class="main-images" alt="sku主图">
 
@@ -125,43 +125,38 @@
 
         </div>
 
-
     </div>
 
 
 </template>
 
 <script>
-    import {handleUploadImages} from "@/utils/handleUploadImages";
+    import {handleUploadImage} from "@/utils/handleUploadImage";
     import {checkExt, checkSize} from "@/utils/check";
 
     export default {
         name: "ProductSku",
+        props: {
+            //商品信息
+            product_sku: {
+                type: Array,
+                default: () => {
+                    return []
+                }
+            },
+        },
         data() {
 
             return {
-                form: {},
-                upload_images: require('@/assets/images/admin/upload-bg.png'),
+                sku_default: {
+                    'title': [],
+                    'table_data': [],
+                    'basic_attrs': [],
+                },
+                sku: {},
                 //规格
                 specs: [],
-                //规格表
-                sku: {
-                    'title': [],
-                    'basic_attrs': [],
-                    'table_data': [],
-                    /*
-
-                     table_data = [
-
-                        'attrs': value,
-                        'image': '',
-                        'stock': '',
-                        'price': '',
-                        'cost_price': '',
-                      ]
-
-                     */
-                },
+                //基础属性
                 basic_attrs: [
                     {
                         'name': '主图',
@@ -191,12 +186,101 @@
                         'min': 0
                     },
                 ],
+                upload_images: require('@/assets/images/admin/upload-bg.png'),
                 images_ext: 'image/jpeg,image/jpg,image/png',//图片类型
                 images_size: 2,//单位 M
             };
         },
-        methods: {
+        created() {
 
+            this.setSkuDefault();
+        },
+        methods: {
+            setSkuDefault() {
+                //设置默认值
+                this.sku = this.deepCopy(this.sku_default);
+            },
+            setSkuData(product_sku) {
+                this.sku.title = this.getSkuTitleName(product_sku);
+                this.sku.table_data = this.getSkuTableData(product_sku);
+                this.sku.basic_attrs = this.deepCopy(this.basic_attrs);
+            },
+            getSkuTitleName(product_sku) {
+
+                let title = [];
+
+                for (let item of product_sku) {
+
+                    title = Object.keys(item.attrs);
+                    break;
+                }
+
+                return title;
+
+            },
+            getSkuTableData(product_sku) {
+
+                let data_obj = {}, table_data = [];
+
+                product_sku.map((item) => {
+
+                    data_obj = {};
+                    data_obj.attrs_name = Object.values(item.attrs);
+                    data_obj.attrs = item.attrs;
+                    data_obj.image = item.image;
+                    data_obj.stock = item.stock;
+                    data_obj.price = item.price;
+                    data_obj.cost_price = item.cost_price;
+
+                    table_data.push(data_obj);
+
+                });
+
+                return table_data;
+
+            },
+            getSpecsData(product_sku) {
+
+                let specs = [];
+                let obj = {};
+
+                this.sku.title.map((item) => {
+                    obj = {};
+                    obj.name = item;
+                    obj.params = [];
+
+                    specs.push(obj);
+
+                });
+
+                product_sku.map((item) => {
+
+                    for (let index in item.attrs) {
+
+                        for (let spec of specs) {
+
+                            //判断属性名是否相同
+                            if (index === spec.name) {
+
+                                //判断该参数是否已经加入了
+                                if (!spec.params.includes(item.attrs[index])) {
+
+                                    spec.params.push(item.attrs[index]);
+                                    break;
+                                }
+
+                            }
+
+                        }
+
+
+                    }
+
+                });
+
+                return specs;
+
+            },
             //递归 sku笛卡尔积
             handleSkuCartesian(arr, previous_arr = []) {
 
@@ -366,11 +450,7 @@
                 }
 
                 // 初始化
-                this.sku = {
-                    'title': [],
-                    'table_data': [],
-                    'basic_attrs': [],
-                };
+                this.sku = this.deepCopy(this.sku_default);
 
                 //获取sku笛卡尔积
                 let sku_cartesian = this.getSkuCartesian();
@@ -406,7 +486,7 @@
                                 "value_name": "stock"
                             },
                             {
-                                "name": "成本价",
+                                "name": "进价",
                                 "style": "basic-input-title",
                                 "type": "input",
                                 "value_name": "cost_price"
@@ -581,7 +661,7 @@
 
                 });
 
-                let table_data = this.copyDeep(this.sku.table_data);
+                let table_data = this.deepCopy(this.sku.table_data);
 
                 table_data.map((item, index) => {
 
@@ -593,7 +673,7 @@
 
                 return product_sku;
 
-                /*
+                /* 最终提交的格式
 
                   product_sku = {
 
@@ -670,7 +750,7 @@
                 let value_map = this.getBasicAttrsMap();
 
                 for (let item of this.sku.table_data) {
-                    //验证是否为数字！！！！！！
+
                     //验证attrs
                     if (Object.keys(item.attrs).length === 0) {
 
@@ -774,9 +854,9 @@
 
             },
             //sku主图上传
-            uploadImages(params, key) {
+            uploadImage(params, key) {
 
-                handleUploadImages(params.file).then(result => {
+                handleUploadImage(params.file).then(result => {
 
                     if (result.code === 201) {
 
@@ -814,6 +894,18 @@
                 return map;
             },
 
+        }, watch: {
+            product_sku(value, old_value) {
+
+                //如果不为空 说明是编辑 需要赋值
+                if (value !== 0) {
+
+                    this.setSkuData(value);
+
+                    this.specs = this.getSpecsData(value);
+
+                }
+            }
         }
     };
 </script>
