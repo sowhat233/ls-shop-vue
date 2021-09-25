@@ -16,7 +16,7 @@
 <script>
 
     //http
-    import {categoryEdit, categoryFindById} from "@/http/category";
+    import {editCategory, getCategoryEditData} from "@/http/category";
 
     //组件
     import CategoryForm from '@/views/category/childComponets/CategoryForm';
@@ -53,7 +53,7 @@
 
                     this.loading = true;
 
-                    categoryEdit(this.data, this.category_id).then(result => {
+                    editCategory(this.data, this.category_id).then(result => {
 
                         console.log(result);
 
@@ -99,7 +99,7 @@
 
             this.category_id = this.$route.query.id;
 
-            categoryFindById(this.category_id).then(result => {
+            getCategoryEditData(this.category_id).then(result => {
 
                 console.log(result);
 

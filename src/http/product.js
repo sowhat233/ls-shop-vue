@@ -1,9 +1,17 @@
 import {request} from "./request";
 
-export function productAdd(data) {
+export function createProduct(data) {
     return request({
         url: '/product',
         method: 'POST',
+        data: data,
+    });
+}
+
+export function updateProduct(data, id) {
+    return request({
+        url: '/product/' + id,
+        method: 'PATCH',
         data: data,
     });
 }
@@ -18,9 +26,9 @@ export function changeStatus(id) {
 
 }
 
-export function getEditData(product_id) {
+export function getProductEditData(id) {
     return request({
-        url: `/product/` + product_id + `/edit`,
+        url: `/product/` + id + `/edit`,
         method: 'GET',
     });
 }
@@ -44,10 +52,3 @@ export function getProductInfo(id) {
 
 }
 
-export function productUpdate(data, product_id) {
-    return request({
-        url: '/product/' + product_id,
-        method: 'PATCH',
-        data: data,
-    });
-}

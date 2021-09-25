@@ -16,7 +16,7 @@
 <script>
 
     //http
-    import {categoryAdd} from "@/http/category";
+    import {addCategory} from "@/http/category";
 
 
     //组件
@@ -56,7 +56,7 @@
 
                     this.loading = true;
 
-                    categoryAdd(this.data).then(result => {
+                    addCategory(this.data).then(result => {
 
                         console.log(result);
 

@@ -8,7 +8,7 @@
 <script>
 
     //http
-    import {getEditData, productUpdate} from '@/http/product';
+    import {getProductEditData, updateProduct} from '@/http/product';
 
     //子组件
     import ProductForm from './componets/ProductForm';
@@ -40,7 +40,7 @@
         methods: {
             async getEditData() {
 
-                return await getEditData(this.product_id).then(result => {
+                return await getProductEditData(this.product_id).then(result => {
 
                     if (result.code === 200) {
 
@@ -76,7 +76,7 @@
             },
             onSubmit(data) {
 
-                productUpdate(data, this.product_id).then(result => {
+                updateProduct(data, this.product_id).then(result => {
 
                     console.log(result);
 

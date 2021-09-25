@@ -1,6 +1,6 @@
 import {request} from "./request";
 
-export function categoryAdd(data) {
+export function addCategory(data) {
 
     return request({
         url: '/category',
@@ -8,6 +8,16 @@ export function categoryAdd(data) {
         data: data,
     });
 }
+
+export function editCategory(data, id) {
+
+    return request({
+        url: '/category/' + id,
+        method: 'PATCH',
+        data: data,
+    });
+}
+
 
 export function getAllCategory() {
 
@@ -26,20 +36,10 @@ export function categoryDelete(id) {
     });
 }
 
-export function categoryEdit(data, id) {
+export function getCategoryEditData(id) {
 
     return request({
-        url: '/category/' + id,
-        method: 'PATCH',
-        data: data,
-    });
-}
-
-
-export function categoryFindById(id) {
-
-    return request({
-        url: '/category/' + id,
+        url: '/category/' + id + /edit/,
         method: 'GET',
     });
 }

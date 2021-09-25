@@ -7,7 +7,7 @@
 <script>
 
     //http
-    import {productAdd} from "@/http/product";
+    import {createProduct} from "@/http/product";
 
     //子组件
     import ProductForm from './componets/ProductForm';
@@ -31,7 +31,7 @@
 
             onSubmit(data) {
 
-                productAdd(data).then(result => {
+                createProduct(data).then(result => {
 
                     console.log(result);
 
