@@ -92,9 +92,10 @@
 </template>
 
 <script>
+    //http
     import {handleUploadImage} from "@/utils/handleUploadImage";
     import {checkExt, checkSize} from "@/utils/check";
-    import {getCategoryList} from "@/http/category/all";
+    import {getCategoryList} from "@/http/category";
 
     export default {
         name: "ProductInfo",

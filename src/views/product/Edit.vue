@@ -3,17 +3,15 @@
     <product-form :product_info="product_info" :product_detail="product_detail" :ref="product_form_ref"
                   :product_sku="product_sku" :spec_type="spec_type" @returnSubmitData="onSubmit"></product-form>
 
-
 </template>
 
 <script>
 
+    //http
+    import {getEditData, productUpdate} from '@/http/product';
+
     //子组件
     import ProductForm from './componets/ProductForm';
-
-    //http
-    import {getEditData} from '@/http/product/edit';
-    import {productUpdate} from '@/http/product/update';
 
     //mixins
     import {closeSubmitLoading} from '@/mixins/product/closeSubmitLoading'

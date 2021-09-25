@@ -71,8 +71,7 @@
 
 <script>
 
-    import {getCategoryPaginate} from "@/http/category/paginate";
-    import {CategoryDelete} from "@/http/category/delete";
+    import {getCategoryPaginate,categoryDelete} from "@/http/category";
 
     export default {
         name: "CategoryIndex",
@@ -170,7 +169,7 @@
 
                     console.log(index, row.id);
 
-                    CategoryDelete(row.id).then(result => {
+                    categoryDelete(row.id).then(result => {
 
                         if (result.code === 204) {
 
@@ -179,7 +178,14 @@
                                 'type': 'success',
                             });
 
-                            this.table_data.splice(index, 1);
+                            // this.table_data.splice(index, 1);
+                        }else{
+
+                            this.$message({
+                                'message': result.message,
+                                'type': 'error',
+                            });
+
                         }
 
 

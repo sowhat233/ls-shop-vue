@@ -16,7 +16,8 @@
 <script>
 
     //http
-    import {categoryAdd} from "@/http/category/add";
+    import {categoryAdd} from "@/http/category";
+
 
     //组件
     import CategoryForm from '@/views/category/childComponets/CategoryForm';
@@ -70,7 +71,7 @@
 
                             this.$message({
                                 'message': result.message,
-                                'type': 'warning',
+                                'type': 'error',
                             });
                         }
 

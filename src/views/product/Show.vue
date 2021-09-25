@@ -128,7 +128,7 @@
 
 <script>
 
-    import {getProductInfo} from "@/http/product/show";
+    import {getProductInfo} from "@/http/product";
 
     export default {
         name: "ProductShow",

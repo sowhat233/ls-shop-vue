@@ -15,10 +15,8 @@
 
 <script>
 
-
     //http
-    import {categoryFindById} from "@/http/category/find";
-    import {categoryEdit} from "@/http/category/edit";
+    import {categoryEdit, categoryFindById} from "@/http/category";
 
     //组件
     import CategoryForm from '@/views/category/childComponets/CategoryForm';
@@ -70,7 +68,7 @@
 
                             this.$message({
                                 'message': result.message,
-                                'type': 'warning',
+                                'type': 'error',
                             });
                         }
 

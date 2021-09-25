@@ -82,8 +82,7 @@
 
 <script>
 
-    import {getProductList} from "@/http/product/list";
-    import {changeStatus} from "@/http/product/changeStatus";
+    import {getProductList, changeStatus} from "@/http/product";
 
     export default {
         name: "ProductIndex",

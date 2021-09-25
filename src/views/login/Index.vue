@@ -25,7 +25,7 @@
 </template>
 
 <script>
-    import {login} from "@/http/login/login";
+    import {login} from "@/http/login";
     import {getToken} from "@/utils/token";
 
     export default {

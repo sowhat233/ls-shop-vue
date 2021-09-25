@@ -7,7 +7,7 @@
 <script>
 
     //http
-    import {productAdd} from "@/http/product/add";
+    import {productAdd} from "@/http/product";
 
     //子组件
     import ProductForm from './componets/ProductForm';
