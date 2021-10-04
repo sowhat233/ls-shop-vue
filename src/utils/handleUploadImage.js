@@ -1,4 +1,4 @@
-import {uploadImage} from "@/http/upload/image";
+import {uploadImage} from "@/http/upload";
 
 export function handleUploadImage(images) {
 
