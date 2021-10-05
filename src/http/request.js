@@ -5,7 +5,7 @@ import {getToken,setToken} from "@/utils/token";
 export function request(config) {
 
     const instance = axios.create({
-        baseURL: 'http://api.ls-shop.com:5200/api/v1/admin',
+        baseURL: process.env.VUE_APP_BASE_url+process.env.VUE_APP_ADMIN_PATH,
         timeout: 10000,
     });
 

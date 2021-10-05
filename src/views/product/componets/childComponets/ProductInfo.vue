@@ -95,7 +95,7 @@
     //http
     import {handleUploadImage} from "@/utils/handleUploadImage";
     import {checkExt, checkSize} from "@/utils/check";
-    import {getCategoryList} from "@/http/category";
+    import {getAllCategory} from "@/http/category";
 
     export default {
         name: "ProductInfo",
@@ -183,7 +183,7 @@
         methods: {
             getCategoryList() {
 
-                getCategoryList().then(result => {
+                getAllCategory().then(result => {
 
                     this.category_list = result.data.category_list;
 

@@ -37,7 +37,6 @@
                 valid: true
             };
         },
-
         methods: {
 
             onSubmit() {
