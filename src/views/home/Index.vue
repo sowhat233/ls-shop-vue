@@ -17,10 +17,15 @@
             }
         },
         mounted() {
+
+            //浏览器关闭或者刷新的时候 关闭websocket连接
+            window.addEventListener('beforeunload', (e) => this.close());
+
             // 初始化
             this.init()
         },
         methods: {
+
             init: function () {
 
                 if (typeof (WebSocket) === "undefined") {
@@ -35,6 +40,7 @@
 
                     // 监听socket消息
                     this.socket.onmessage = this.getMessage;
+
                 }
             },
             open: function () {
@@ -62,13 +68,26 @@
             close: function () {
                 console.log("socket已经关闭");
             },
-
         },
         destroyed() {
             // 销毁监听
             this.socket.onclose = this.close
         }
     }
+
+
+    window.onbeforeunload = function (e) {
+        e = e || window.event;
+
+        // 兼容IE8和Firefox 4之前的版本
+        if (e) {
+            e.returnValue = '关闭提示';
+        }
+
+        // Chrome, Safari, Firefox 4+, Opera 12+ , IE 9+
+        return '关闭提示';
+    };
+
 </script>
 
 <style>
