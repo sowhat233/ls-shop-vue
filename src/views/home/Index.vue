@@ -4,13 +4,16 @@
     </div>
 </template>
 
+
 <script>
+    import {getToken} from "@/utils/token";
+
     export default {
         name: "HomeIndex",
         data() {
             return {
                 path: "ws:" + process.env.VUE_APP_BASE_url + process.env.VUE_APP_WS_PATH,
-                socket: ""
+                socket: "",
             }
         },
         mounted() {
@@ -25,11 +28,21 @@
                 } else {
 
                     // 实例化socket
-                    this.socket = new WebSocket(this.path);
+                    this.socket = new WebSocket(this.path + '?token=' + getToken());
+
+                    // 监听socket连接
+                    this.socket.onopen = this.open;
 
                     // 监听socket消息
                     this.socket.onmessage = this.getMessage;
                 }
+            },
+            open: function () {
+                console.log('连接上了。');
+            },
+            send: function (message) {
+
+                this.socket.send(message);
             },
             getMessage: function (msg) {
 

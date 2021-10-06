@@ -1,4 +1,4 @@
-export function getToken(value = false) {
+export function getToken(value = 'access_token') {
 
     let token = JSON.parse(window.localStorage.getItem('token'));
 
@@ -7,18 +7,20 @@ export function getToken(value = false) {
         return false;
     }
 
-    if (value) {
+    //如果传的是false 那么就把整个对象返回
+    if (!value) {
 
-        return token[value];
+        return token;
     }
 
-    return token;
+    return token[value];
+
 }
 
 
 export function setToken(config) {
 
-    let access_token = getToken('access_token');
+    let access_token = getToken();
 
     if (access_token) {
 
