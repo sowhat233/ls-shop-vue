@@ -14,15 +14,15 @@
             return {
                 path: "ws:" + process.env.VUE_APP_BASE_url + process.env.VUE_APP_WS_PATH,
                 socket: "",
-            }
+            };
         },
         mounted() {
 
             //浏览器关闭或者刷新的时候 关闭websocket连接
-            window.addEventListener('beforeunload', (e) => this.close());
+            window.addEventListener("beforeunload", (e) => this.close());
 
             // 初始化
-            this.init()
+            this.init();
         },
         methods: {
 
@@ -33,7 +33,7 @@
                 } else {
 
                     // 实例化socket
-                    this.socket = new WebSocket(this.path + '?token=' + getToken());
+                    this.socket = new WebSocket(this.path + "?token=" + getToken());
 
                     // 监听socket连接
                     this.socket.onopen = this.open;
@@ -44,7 +44,7 @@
                 }
             },
             open: function () {
-                console.log('连接上了。');
+                console.log("连接上了。");
             },
             send: function (message) {
 
@@ -52,13 +52,13 @@
             },
             getMessage: function (msg) {
 
-                this.$alert('您有一条新的订单!!', '提示', {
-                    confirmButtonText: '确定',
-                    type: 'warning',
+                this.$alert("您有一条新的订单!!", "提示", {
+                    confirmButtonText: "确定",
+                    type: "warning",
                     callback: (action) => {
 
                         this.$router.push({
-                            name: 'ProductIndex',
+                            name: "ProductIndex",
                         });
 
                     }
@@ -71,21 +71,8 @@
         },
         destroyed() {
             // 销毁监听
-            this.socket.onclose = this.close
+            this.socket.onclose = this.close;
         }
-    }
-
-
-    window.onbeforeunload = function (e) {
-        e = e || window.event;
-
-        // 兼容IE8和Firefox 4之前的版本
-        if (e) {
-            e.returnValue = '关闭提示';
-        }
-
-        // Chrome, Safari, Firefox 4+, Opera 12+ , IE 9+
-        return '关闭提示';
     };
 
 </script>
