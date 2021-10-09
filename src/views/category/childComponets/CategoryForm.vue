@@ -10,6 +10,10 @@
             <el-input v-model="form.description" type="textarea" rows="10"></el-input>
         </el-form-item>
 
+        <div class="submit-div">
+            <el-button type="primary" @click="onSubmit" :loading="loading">立即创建</el-button>
+        </div>
+
     </el-form>
 
 </template>
@@ -22,9 +26,9 @@
                 type: Object,
                 default: () => {
                     return {
-                        name: '',
-                        description: '',
-                    }
+                        name: "",
+                        description: "",
+                    };
 
                 },
             },
@@ -32,13 +36,14 @@
         },
         data() {
             return {
+                loading: false,
                 rules: {
                     name: [
-                        {required: true, message: '请输入商品名称', trigger: 'blur'},
-                        {min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur'},
+                        {required: true, message: "请输入商品名称", trigger: "blur"},
+                        {min: 2, max: 20, message: "长度在 2 到 20 个字符", trigger: "blur"},
                     ],
                     description: [
-                        {max: 200, message: '长度不能超过 200 个字符', trigger: 'blur'},
+                        {max: 200, message: "长度不能超过 200 个字符", trigger: "blur"},
                     ],
 
                 },
@@ -46,32 +51,24 @@
         },
         methods: {
 
-            //验证
-            validate() {
+            onSubmit() {
 
-                this.$refs['form'].validate((valid) => {
+                this.$refs["form"].validate((valid) => {
 
-                    //如果验证不通过
-                    if (!valid) {
+                    //验证通过
+                    if (valid) {
 
-                        //告诉父组件验证不通过
-                        this.$emit('validateFailed');
+                        this.loading = true;
 
+                        //发送表单的数据给父组件
+                        this.$emit("returnSubmitData", this.form);
                     }
 
                     //阻止表单提交
                     return false;
 
                 });
-
-            },
-            //给父组件返回数据
-            returnData() {
-
-                //发送表单的数据
-                this.$emit('returnData', this.form);
-
-            },
+            }
 
         },
     };

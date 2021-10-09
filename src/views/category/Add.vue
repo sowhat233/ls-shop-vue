@@ -1,15 +1,6 @@
 <template>
 
-    <div class="add-container">
-
-        <category-form :ref="ref" :form="form" @validateFailed="validateFailed"
-                       @returnData="getComponentData"></category-form>
-
-        <div class="submit-div">
-            <el-button type="primary" @click="onSubmit">立即创建</el-button>
-        </div>
-
-    </div>
+    <category-form @returnSubmitData="onSubmit" :ref="ref_form"></category-form>
 
 </template>
 
@@ -18,10 +9,11 @@
     //http
     import {addCategory} from "@/http/category";
 
-
     //组件
-    import CategoryForm from '@/views/category/childComponets/CategoryForm';
+    import CategoryForm from "@/views/category/childComponets/CategoryForm";
 
+    //mixins
+    import {closeSubmitLoading} from "@/mixins/closeSubmitLoading";
 
     export default {
         name: "CategoryAdd",
@@ -31,73 +23,47 @@
         data() {
             return {
                 form: {
-                    name: '',//商品名字
-                    description: '',//商品简介
+                    name: "",//商品名字
+                    description: "",//商品简介
                 },
-                data: [],
-                ref: 'component_form',
-                loading: false,
-                valid: true
             };
         },
-
+        mixins: [closeSubmitLoading],
         methods: {
 
-            onSubmit() {
+            onSubmit(data) {
 
-                //验证数据
-                this.validateData();
+                addCategory(data).then(result => {
 
-                //验证
-                if (this.valid) {
+                    console.log(result);
 
-                    //获取数据 子组件会触发父组件的getComponentData方法 然后赋值给this.data
-                    this.$refs[this.ref].returnData();
+                    if (result.code === 201) {
 
-                    this.loading = true;
+                        this.$message({
+                            "message": "提交成功!",
+                            "type": "success",
+                            onClose: () => {
+                                location.reload();
+                            },
+                        });
 
-                    addCategory(this.data).then(result => {
+                    } else {
 
-                        console.log(result);
+                        this.$message({
+                            "message": result.message,
+                            "type": "error",
+                        });
+                    }
 
-                        if (result.code === 201) {
+                    this.closeLoading();
 
-                            this.$message({
-                                'message': '提交成功!',
-                                'type': 'success',
-                            });
-
-                        } else {
-
-                            this.$message({
-                                'message': result.message,
-                                'type': 'error',
-                            });
-                        }
-
-                    });
-
-                    this.loading = false;
-
-                }
+                });
 
             },
-            validateData() {
+            closeLoading() {
 
-                this.$refs[this.ref].validate();
-
+                this.loading = false;
             },
-            validateFailed() {
-
-                this.valid = false;
-
-            },
-            getComponentData(value) {
-
-                this.data = value;
-
-            },
-
         }
 
     };

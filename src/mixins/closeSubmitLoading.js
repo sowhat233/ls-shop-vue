@@ -1,14 +1,14 @@
 export const closeSubmitLoading = {
     data() {
         return {
-            product_form_ref: 'product_form'
+            ref_form: 'ref_form'
         };
     },
     methods: {
 
         closeLoading() {
 
-            this.$refs[this.product_form_ref].closeLoading();
+            this.$refs[this.ref_form].closeLoading();
         }
     },
 };

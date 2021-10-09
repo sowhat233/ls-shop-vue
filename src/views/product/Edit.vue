@@ -14,7 +14,7 @@
     import ProductForm from './componets/ProductForm';
 
     //mixins
-    import {closeSubmitLoading} from '@/mixins/product/closeSubmitLoading'
+    import {closeSubmitLoading} from '@/mixins/closeSubmitLoading'
 
     export default {
         name: "ProductEdit",

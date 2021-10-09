@@ -1,6 +1,6 @@
 <template>
 
-    <product-form @returnSubmitData="onSubmit" :ref="product_form_ref"></product-form>
+    <product-form @returnSubmitData="onSubmit" :ref="ref_form"></product-form>
 
 </template>
 
@@ -10,10 +10,10 @@
     import {createProduct} from "@/http/product";
 
     //子组件
-    import ProductForm from './componets/ProductForm';
+    import ProductForm from "./componets/ProductForm";
 
     //mixins
-    import {closeSubmitLoading} from '@/mixins/product/closeSubmitLoading'
+    import {closeSubmitLoading} from "@/mixins/closeSubmitLoading";
 
     export default {
         name: "ProductAdd",
@@ -38,8 +38,8 @@
                     if (result.code === 201) {
 
                         this.$message({
-                            'message': '提交成功!',
-                            'type': 'success',
+                            "message": "提交成功!",
+                            "type": "success",
                             onClose: () => {
                                 location.reload();
                             },
@@ -48,8 +48,8 @@
                     } else {
 
                         this.$message({
-                            'type': 'warning',
-                            'message': result.message,
+                            "type": "warning",
+                            "message": result.message,
 
                         });
                     }
