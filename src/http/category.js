@@ -9,7 +9,7 @@ export function addCategory(data) {
     });
 }
 
-export function editCategory(data, id) {
+export function updateCategory(data, id) {
 
     return request({
         url: '/category/' + id,

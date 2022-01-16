@@ -38,6 +38,7 @@
         },
         mixins: [closeSubmitLoading],
         methods: {
+
             async getEditData() {
 
                 return await getProductEditData(this.product_id).then(result => {
@@ -102,7 +103,6 @@
                     this.closeLoading();
 
                 });
-
 
             },
         },

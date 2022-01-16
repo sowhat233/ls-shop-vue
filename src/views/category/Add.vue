@@ -22,10 +22,7 @@
         },
         data() {
             return {
-                form: {
-                    name: "",//商品名字
-                    description: "",//商品简介
-                },
+                form: {},
             };
         },
         mixins: [closeSubmitLoading],
@@ -40,11 +37,8 @@
                     if (result.code === 201) {
 
                         this.$message({
-                            "message": "提交成功!",
+                            "message": "添加成功!",
                             "type": "success",
-                            onClose: () => {
-                                location.reload();
-                            },
                         });
 
                     } else {
@@ -55,15 +49,12 @@
                         });
                     }
 
-                    this.closeLoading();
-
                 });
 
-            },
-            closeLoading() {
-
                 this.loading = false;
+
             },
+
         }
 
     };
@@ -71,5 +62,4 @@
 </script>
 
 <style scoped>
-    @import '../../assets/css/category/public.css';
 </style>
